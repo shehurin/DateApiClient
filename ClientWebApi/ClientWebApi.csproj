@@ -86,7 +86,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DateApiWorker.cs" />
+    <Compile Include="Api\DateApiWorker.cs" />
+    <Compile Include="Loger\LogEntity.cs" />
+    <Compile Include="Loger\Loger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Net;
 using System.Collections.Specialized;
+using ClientWebApi.Loger;
 
 namespace ClientWebApi
 {
@@ -17,6 +18,7 @@ namespace ClientWebApi
         public string DateFrom { get; set; }
         public string DateTo { get; set; }
         private static readonly HttpClient client = new HttpClient();
+        Loger.Loger loger = new Loger.Loger();
 
         public DateApiWorker(string dateFrom, string dateTo)
         {
@@ -27,6 +29,16 @@ namespace ClientWebApi
         public async Task<bool> SendDatesAsync(string href)
         {
             var response = await client.PostAsync($"{href}{DateFrom}/{DateTo}", null);
+
+            LogEntity log = new LogEntity()
+            {
+                DateOfRequest = DateTime.Now,
+                Request = $"{href}{DateFrom}/{DateTo}",
+                RequestMethod = "POST",
+                Response = "OK"
+            };
+            loger.AddLog(log);
+            loger.Save();
 
             return true;
         }
@@ -44,9 +56,15 @@ namespace ClientWebApi
                 returnedResult.Add(i.From.ToString(), i.To.ToString());
             }
 
-
-            //string name = stuff.From;
-            //string address = stuff.To;
+            LogEntity log = new LogEntity()
+            {
+                DateOfRequest = DateTime.Now,
+                Request = responseString,
+                RequestMethod = "GET",
+                Response = stuff.ToString()
+            };
+            loger.AddLog(log);
+            loger.Save();
 
             return returnedResult;
         }
